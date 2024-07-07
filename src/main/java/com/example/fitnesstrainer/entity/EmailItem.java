@@ -3,6 +3,7 @@ package com.example.fitnesstrainer.entity;
 import com.example.fitnesstrainer.post.ListItem;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 
@@ -26,6 +27,12 @@ public class EmailItem {
 
     public EmailItem() {
         // Default constructor
+    }
+
+    public EmailItem(String email, String password) {
+        this.email = email;
+        this.password = password;
+        this.items = new ArrayList<>();
     }
 
     public EmailItem(String emailId, List<ListItem> items) {

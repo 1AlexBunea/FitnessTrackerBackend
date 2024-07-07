@@ -21,12 +21,13 @@ public class EmailItemController {
     @PostMapping("/add")
     public ResponseEntity<String> createEmailItem(@RequestBody EmailItem emailItem) {
         EmailItem existingEmailItem = emailItemService.findByEmail(emailItem.getEmail());
-        if (existingEmailItem != null) { // if the person exists already
+        if (existingEmailItem != null) { // updates existing person
             emailItemService.deleteEmployeeById(existingEmailItem.getId());
             existingEmailItem.setItems(emailItem.getItems());
             emailItemService.saveEmailItem(existingEmailItem);
-            return ResponseEntity.badRequest().body("Updating email");
+            return ResponseEntity.ok("Updated User Profile email");
         }
+        // adds a new person
         emailItemService.saveEmailItem(emailItem);
         return ResponseEntity.ok("Email item created successfully.");
     }
@@ -35,13 +36,15 @@ public class EmailItemController {
     @GetMapping("/login/{email}/{password}")
     public ResponseEntity<EmailItem> getEmailItemByEmail(@PathVariable String email, @PathVariable String password) {
         EmailItem existingPerson = emailItemService.findByEmail(email);
-        if (existingPerson == null) {
-            return ResponseEntity.notFound().build();
+        if (existingPerson == null) { //create new person
+            existingPerson = new EmailItem(email, password);
+            emailItemService.saveEmailItem(existingPerson);
+            return ResponseEntity.ok(existingPerson);
         }
-        if (!existingPerson.getPassword().equals(password)) {
+        if (!existingPerson.getPassword().equals(password)) { //username exists, but password is wrong
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(existingPerson);
+        return ResponseEntity.ok(existingPerson); //successfully logged in
     }
 
 //    @GetMapping("/{id}/{password}")
