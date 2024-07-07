@@ -47,6 +47,19 @@ public class EmailItemController {
         return ResponseEntity.ok(existingPerson); //successfully logged in
     }
 
+    @DeleteMapping("/delete/{email}/{password}")
+    public ResponseEntity<String> deleteEmployeeByEmail(@PathVariable String email, @PathVariable String password) {
+        EmailItem person = emailItemService.findByEmail(email);
+        if (person == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (!person.getPassword().equals(password)) {
+            return ResponseEntity.badRequest().build();
+        }
+        emailItemService.deleteEmployeeById(person.getId());
+        return ResponseEntity.ok("Employee deleted successfully.");
+    }
+
 //    @GetMapping("/{id}/{password}")
 //    public ResponseEntity<EmailItem> getEmailItemById(@PathVariable Long id, @PathVariable String password) {
 //        Optional<EmailItem> person = emailItemService.findById(id);
@@ -59,7 +72,7 @@ public class EmailItemController {
 //        emailItemService.deleteEmployeeById(id);
 //        return ResponseEntity.ok(person.get());
 //    }
-
+//
 //    @DeleteMapping("/id/{id}/{password}")
 //    public ResponseEntity<String> deleteEmployeeById(@PathVariable Long id, @PathVariable String password) {
 //        Optional<EmailItem> person = emailItemService.findById(id);
@@ -73,17 +86,5 @@ public class EmailItemController {
 //        return ResponseEntity.ok("Employee deleted successfully.");
 //    }
 
-    @DeleteMapping("/delete/{email}/{password}")
-    public ResponseEntity<String> deleteEmployeeByEmail(@PathVariable String email, @PathVariable String password) {
-        EmailItem person = emailItemService.findByEmail(email);
-        if (person == null) {
-            return ResponseEntity.notFound().build();
-        }
-        if (!person.getPassword().equals(password)) {
-            return ResponseEntity.badRequest().build();
-        }
-        emailItemService.deleteEmployeeById(person.getId());
-        return ResponseEntity.ok("Employee deleted successfully.");
-    }
 }
 
