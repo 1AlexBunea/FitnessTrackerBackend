@@ -56,7 +56,3 @@ Important security considerations:
 
 For any queries or feedback, please open an issue in this repository.
 
-## Acknowledgements
-
-- Spring Boot community for comprehensive documentation
-- PostgreSQL for robust data storage
